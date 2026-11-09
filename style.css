@@ -1,0 +1,398 @@
+/* ==========================================================================
+   Hey, Stranger Coffee Collective — style.css (IWED5112 POE Part 3)
+   Single external stylesheet linked from all five pages.
+
+   Structure:
+     1. Variables and base type                     (site-wide)
+     2. Links and buttons (pseudo-selectors)        (site-wide)
+     3. Page shell: header, nav, main, footer       (site-wide)
+     4. Shared components: images, figures, tables, form
+     5. Page-specific selectors (#page-home, #page-about, #page-menu,
+        #page-gallery, #page-contact)
+     6. Responsive rules (Part 3): tablet <= 900px, smartphone <= 600px
+   Web fonts (Fraunces, Inter) are loaded with <link> tags in each page's
+   <head> (Part 3 SEO / speed refinement — replaces the old @import).
+   ========================================================================== */
+
+
+/* ---------- 1. Variables and base type ---------- */
+
+:root {
+  --paper:      #F7F3EC;   /* page background: warm off-white */
+  --ink:        #2B231D;   /* body text: roast brown */
+  --ink-soft:   #6A5D52;   /* secondary text */
+  --clay:       #93532F;   /* accent: terracotta / clay */
+  --clay-dark:  #6E3C20;
+  --stone:      #D9CFBF;
+  --stone-line: #E4DCCE;   /* hairlines */
+  --cream:      #EFE8DA;   /* panels */
+  --error:      #A12C1E;   /* form error text and borders */
+
+  --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --sans:  'Inter', 'Segoe UI', Arial, sans-serif;
+
+  --site-width: 70rem;     /* 1120px at the default 16px root size */
+  --gutter: 2rem;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 1.0625rem;    /* 17px */
+  line-height: 1.6;
+}
+
+h1, h2, h3 {
+  font-family: var(--serif);
+  font-weight: 500;
+  line-height: 1.2;
+  margin: 0 0 0.5em;
+}
+
+h1 { font-size: 2.6rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.3rem; }
+
+/* Page and section headings get a short clay rule beneath them */
+main h1::after,
+main h2::after {
+  content: "";
+  display: block;
+  width: 3rem;
+  height: 3px;
+  background: var(--clay);
+  margin-top: 0.5rem;
+}
+
+p { margin: 0 0 1em; max-width: 64ch; }
+
+.lead { font-size: 1.15rem; color: var(--ink-soft); }
+.note { font-size: 0.9rem; color: var(--ink-soft); }
+
+
+/* ---------- 2. Links and buttons (pseudo-selectors) ---------- */
+
+a { color: var(--clay); }
+a:hover, a:focus { color: var(--clay-dark); }
+a:focus-visible,
+button:focus-visible { outline: 2px solid var(--clay); outline-offset: 3px; }
+
+.button {
+  display: inline-block;
+  background: var(--clay);
+  color: var(--paper);
+  padding: 0.7rem 1.4rem;
+  border: 0;
+  border-radius: 3px;
+  text-decoration: none;
+  font: 500 0.95rem var(--sans);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.button:hover, .button:focus { background: var(--clay-dark); color: var(--paper); }
+.button:active { transform: translateY(1px); }
+
+
+/* ---------- 3. Page shell: header, nav, main, footer ---------- */
+
+header, main, footer {
+  max-width: var(--site-width);
+  margin: 0 auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+/* Header sticks to the top of the viewport and stays above page content */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--paper);
+  border-bottom: 1px solid var(--stone-line);
+  padding-top: 1.25rem;
+  padding-bottom: 1rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+/* Brand is a link, not an <h1>, so each page can have its own <h1> (SEO) */
+.brand { text-decoration: none; color: var(--ink); }
+.brand-name {
+  display: block;
+  font-family: var(--serif);
+  font-size: 1.7rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+.brand-tag {
+  display: block;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+}
+
+nav a {
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding-bottom: 4px;
+  border-bottom: 2px solid transparent;
+}
+/* Hover and current-page states share one declaration block */
+nav a:hover,
+nav a[aria-current="page"] { color: var(--clay); border-bottom-color: var(--clay); }
+
+main { padding-top: 3rem; padding-bottom: 4rem; }
+main > section, main > article { margin-bottom: 3.5rem; }
+main > :last-child { margin-bottom: 0; }
+
+footer {
+  border-top: 1px solid var(--stone-line);
+  padding-top: 1.5rem;
+  padding-bottom: 2.5rem;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+footer p { margin: 0.2em 0; max-width: none; }
+
+
+/* ---------- 4. Shared components ---------- */
+
+img { max-width: 100%; height: auto; display: block; background: var(--stone); }
+
+figure { margin: 0; }
+figcaption {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  margin-top: 0.5rem;
+}
+
+.float-right {
+  float: right;
+  width: 40%;
+  max-width: 26rem;
+  margin: 0 0 1rem 2.5rem;
+  border-radius: 3px;
+}
+
+/* Tables: shared look */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0 2.5rem;
+  font-size: 0.97rem;
+}
+caption {
+  text-align: left;
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  padding-bottom: 0.6rem;
+  caption-side: top;
+}
+th { text-align: left; font-weight: 500; }
+thead th {
+  font-family: var(--serif);
+  font-size: 1rem;
+  padding: 0 1rem 0.6rem 0.75rem;
+  border-bottom: 2px solid var(--ink);
+}
+td, tbody th { padding: 0.8rem 1rem 0.8rem 0.75rem; border-bottom: 1px solid var(--stone-line); vertical-align: top; }
+tbody tr:nth-child(even) { background: var(--cream); }
+tbody tr:hover { background: var(--stone); }
+
+/* Menu tables only: item names stay on one line, prices right-aligned */
+.menu-table td:first-child { font-weight: 500; white-space: nowrap; }
+.menu-table th:last-child,
+.menu-table td:last-child { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* Opening-hours table only */
+.hours-table th { width: 50%; }
+
+/* Enquiry form (contact page) */
+.field { margin-bottom: 1.25rem; }
+.field label { display: block; font-weight: 500; margin-bottom: 0.35rem; }
+.field .optional { font-weight: 400; color: var(--ink-soft); font-size: 0.9rem; }
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  font: inherit;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--stone);
+  border-radius: 3px;
+}
+.field textarea { min-height: 9rem; resize: vertical; }
+.field input:focus,
+.field select:focus,
+.field textarea:focus { outline: 2px solid var(--clay); outline-offset: 1px; border-color: var(--clay); }
+.field .is-invalid { border-color: var(--error); background: #FDF5F3; }
+.error { color: var(--error); font-size: 0.88rem; margin: 0.35rem 0 0; min-height: 1.2em; }
+.form-status { margin-top: 1rem; font-weight: 500; }
+.form-status.success { color: #2F5D34; background: #EAF2E6; border-left: 4px solid #2F5D34; padding: 0.8rem 1rem; }
+.form-status.problem { color: var(--error); }
+
+
+/* ---------- 5. Page-specific selectors ---------- */
+
+/* Home: hero copy beside the photograph (landscape photo at its natural ratio) */
+#hero {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 3rem;
+  align-items: center;
+  margin-bottom: 4rem;
+}
+#hero img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 4px; }
+#hero .hero-copy { border-left: 4px solid var(--clay); padding-left: 2rem; }
+#hero .eyebrow {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--clay);
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
+}
+#hero h1::after { display: none; }
+#hero p { color: var(--ink-soft); font-size: 1.05rem; }
+
+/* Home: three-up intro cards */
+#intro {
+  display: flex;
+  gap: 2.5rem;
+  padding: 3rem 0;
+  border-top: 1px solid var(--stone-line);
+  border-bottom: 1px solid var(--stone-line);
+}
+#intro article { flex: 1; }
+#intro h2 { font-size: 1.35rem; }
+#intro p { font-size: 0.97rem; color: var(--ink-soft); }
+
+/* Home: gallery preview strip (three floated images) */
+#gallery-preview { overflow: hidden; }          /* contains the floated images */
+#gallery-preview img { float: left; width: 31.5%; height: 15.5rem; margin-right: 2.75%; object-fit: cover; border-radius: 3px; }
+#gallery-preview img:last-of-type { margin-right: 0; }
+#gallery-preview > a { display: block; clear: both; padding-top: 1.5rem; }  /* block element, so clear works */
+
+/* About: first paragraph of the story gets a drop cap */
+#page-about main > article > p:first-of-type::first-letter {
+  font-family: var(--serif);
+  font-size: 3.2rem;
+  float: left;
+  line-height: 0.9;
+  padding: 4px 8px 0 0;
+  color: var(--clay);
+}
+#page-about main > section { overflow: hidden; }  /* clears the floated image */
+
+/* Menu: the two menu tables sit side by side */
+#page-menu .menu-columns { display: flex; gap: 3rem; align-items: flex-start; }
+#page-menu .menu-columns > section { flex: 1; }
+
+/* Gallery: four-column grid of figures */
+#gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem 1.5rem; }
+#gallery-grid img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 3px; }
+
+/* Contact: details beside the map, form full width below */
+#page-contact main { display: grid; grid-template-columns: 1fr 1fr; column-gap: 3rem; }
+#page-contact main > h1, #contact-form { grid-column: 1 / -1; }
+#page-contact main h2 { font-size: 1.4rem; }
+#contact-details address {
+  font-style: normal;
+  background: var(--cream);
+  padding: 1.5rem 1.75rem;
+  border-left: 4px solid var(--clay);
+  margin-bottom: 2rem;
+}
+#map iframe { width: 100%; height: 26rem; border: 1px solid var(--stone-line); }
+#enquiry-form { max-width: 40rem; }
+
+
+/* ---------- 6. Responsive rules (Part 3) ---------- */
+
+/* Tablet and small laptop: 900px and narrower */
+@media (max-width: 900px) {
+  :root { --gutter: 1.5rem; }
+
+  h1 { font-size: 2.2rem; }
+  h2 { font-size: 1.7rem; }
+
+  header { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+  nav ul { gap: 1.25rem; flex-wrap: wrap; }
+
+  #hero { grid-template-columns: 1fr; gap: 2rem; }
+  #hero img { order: -1; }                     /* photo first, then the copy */
+
+  #gallery-grid { grid-template-columns: repeat(2, 1fr); }
+
+  #page-menu .menu-columns { flex-direction: column; gap: 0; }
+  #page-menu .menu-columns > section { width: 100%; }
+
+  #page-contact main { grid-template-columns: 1fr; }
+}
+
+/* Smartphone, portrait: 600px and narrower */
+@media (max-width: 600px) {
+  :root { --gutter: 1rem; }
+
+  body { font-size: 1rem; }
+  h1 { font-size: 1.85rem; }
+  h2 { font-size: 1.45rem; }
+
+  /* Header is no longer sticky on phones, so it does not cover the content */
+  header { position: static; padding-top: 1rem; padding-bottom: 0.75rem; }
+  .brand-name { font-size: 1.45rem; }
+  nav ul { gap: 0.4rem 1rem; }
+  nav a { font-size: 0.92rem; display: inline-block; padding: 0.35rem 0; }  /* larger tap targets */
+
+  main { padding-top: 1.75rem; padding-bottom: 2.5rem; }
+  main > section, main > article { margin-bottom: 2.5rem; }
+
+  #hero { margin-bottom: 2.5rem; }
+  #hero .hero-copy { padding-left: 1rem; }
+  #hero .eyebrow { font-size: 1rem; }
+
+  #intro { flex-direction: column; gap: 1.75rem; padding: 2rem 0; }
+
+  /* Preview strip: floats removed, images stack full width */
+  #gallery-preview img { float: none; width: 100%; height: 13rem; margin: 0 0 1rem; }
+
+  /* About: image stops floating and sits full width above its text */
+  .float-right { float: none; width: 100%; max-width: none; margin: 0 0 1.25rem; aspect-ratio: 4 / 3; object-fit: cover; }
+  #page-about main > article > p:first-of-type::first-letter { font-size: 2.6rem; }
+
+  #gallery-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  #gallery-grid img { aspect-ratio: 4 / 3; }
+
+  /* Tables: tighter padding, smaller text, item names may wrap */
+  table { font-size: 0.9rem; margin: 1rem 0 2rem; }
+  thead th, td, tbody th { padding-left: 0.5rem; padding-right: 0.5rem; }
+  .menu-table td:first-child { white-space: normal; width: 30%; }
+
+  #contact-details address { padding: 1.1rem 1.25rem; }
+  #map iframe { height: 18rem; }
+  #enquiry-form .button { width: 100%; padding: 0.9rem; }   /* full-width, thumb-friendly */
+
+  footer { padding-bottom: 2rem; }
+}
